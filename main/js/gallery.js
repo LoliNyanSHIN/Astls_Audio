@@ -2,12 +2,12 @@
 const postsData = [
     {
         id: 1,
-        author: "测试",
-        avatar: "https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png", 
-        image: "https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png", 
+        author: "魔王军25年年末合照",
+        avatar: " ",
+        image: "https://pan.xxbyq.net/f/XqZ0hx/ong.jpg",
         time: "2025-12-30",
-        caption: "这是一个测试用的图，用于展示功能是否正常。",
-        tags: ["日常", "测试"], 
+        caption: "这是2025年12月30日晚上的魔王军全体合照喵~",
+        tags: ["日常", "合照","2025"],
         likes: 128
     },
     {
