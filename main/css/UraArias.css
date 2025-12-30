@@ -1,6 +1,12 @@
 h1{
 	font-size: 5em;
 }
-a{
-	color: blue !important;
+.email-link {
+	color: blue
+}
+.email-link:hover {
+	color: red;
+}
+.email-link:active {
+	color: green;
 }
