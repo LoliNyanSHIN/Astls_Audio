@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔王军画廊 - 阿斯特里斯魔王军</title>
+    <link rel="stylesheet" href="../../font/Maple.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/gallery.css">
+    
+    <link rel="shortcut icon" href="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar-wrapper">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <div>
+                    <img class="LoliNyanOnanii" src="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png" alt="Logo" />
+                    <span class="title-text">阿斯特里斯魔王军</span>
+                </div>
+            </div>
+            <div class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="aus.html">关于我们</a></li>
+                    <li><a href="gallery.html" class="active">画廊</a></li>
+                    <li><a href="Arias.html">魔王电台</a></li>
+                    <li class="UraArias"><a href="UraArias.html">里电台</a></li>
+                    <li><a href="post.html">电台公告</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-content gallery-container">
+        <div class="gallery-header">
+            <h1>创作画廊</h1>
+            
+            <button id="openUploadBtn" class="upload-trigger-btn">
+                <i class="fas fa-cloud-upload-alt"></i> 投稿/上传
+            </button>
+            
+            <div class="search-section">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="tagSearchInput" placeholder="搜索标签 (例如: OC, 风景, 像素)...">
+                </div>
+            </div>
+
+            <div class="filter-group" id="authorFilters">
+                <button class="filter-btn active" data-author="all">全部作者</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid"></div>
+        
+        <div id="noResult" style="display:none; text-align:center; color:#999; margin-top:50px;">
+            <p>没有找到相关内容的图片...</p>
+        </div>
+    </div>
+
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传新作品</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="test-warning-box">
+                    <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="warning-text">
+                        <strong>测试功能提示</strong>
+                        <p>此功能仅用于<strong>本地预览测试</strong>。刷新页面后图片将会消失，不会保存到服务器。</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>选择图片</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="newImageFile" accept="image/*">
+                        <div class="upload-preview" id="imagePreviewText">点击选择图片...</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>作者名称</label>
+                    <input type="text" id="newAuthor" placeholder="你的名字">
+                </div>
+
+                <div class="form-group">
+                    <label>标签 (空格或逗号分隔)</label>
+                    <input type="text" id="newTags" placeholder="例如: 像素画 风景">
+                </div>
+
+                <div class="form-group">
+                    <label>描述文案</label>
+                    <textarea id="newCaption" rows="3" placeholder="说点什么..."></textarea>
+                </div>
+
+                <button id="submitUpload" class="submit-btn">发布作品</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageDetailModal" class="image-modal-overlay">
+        <div class="image-modal-container">
+            <div class="image-modal-left">
+                <img id="detail-image" src="" alt="Large View">
+            </div>
+            
+            <div class="image-modal-right">
+                <span class="close-detail-modal">&times;</span>
+
+                <div class="card-header detail-header">
+                    <img id="detail-avatar" src="" class="author-avatar" alt="avatar">
+                    <div class="author-info">
+                        <span id="detail-author" class="author-name"></span>
+                        <span id="detail-time" class="upload-time"></span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>标签</h4>
+                    <div id="detail-tags" class="tags-container"></div>
+                </div>
+
+                <div class="detail-section description-section">
+                    <h4>描述</h4>
+                    <p id="detail-caption" class="detail-caption-text"></p>
+                </div>
+
+                <div class="card-actions detail-actions">
+                    <div class="action-btn detail-like-btn">
+                        <i class="fas fa-heart"></i>
+                        <span id="detail-likes"></span> 赞
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/gallery.js"></script>
+</body>
+</html>
