@@ -12,6 +12,7 @@
 			href="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png"
 			type="image/x-icon"
 		/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	</head>
 	<body>
 		<div class="navbar-wrapper">
@@ -28,27 +29,49 @@
 				</div>
 				<div class="navbar-menu">
 					<ul>
-						<li>
-							<a href="../../index.html">首页</a>
-						</li>
-						<li>
-							<a href="aus.html">关于我们</a>
-						</li>
-						<li>
-							<a href="Arias.html" class="active">魔王电台</a>
-						</li>
-						<li class="UraArias">
-							<a href="UraArias.html">里电台</a>
-						</li>
-						<li>
-							<a href="post.html">电台公告</a>
-						</li>
+						<li><a href="../../index.html">首页</a></li>
+						<li><a href="aus.html">关于我们</a></li>
+						<li><a href="gallery.html">画廊</a></li>
+						<li><a href="Arias.html" class="active">魔王电台</a></li>
+						<li class="UraArias"><a href="UraArias.html">里电台</a></li>
+						<li><a href="post.html">电台公告</a></li>
+                        <li>
+                            <button id="themeToggle" class="theme-btn" title="切换阅读模式">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </li>
 					</ul>
 				</div>
 			</nav>
 		</div>
+
 		<div class="page-content">
-			<h1>欢迎来到阿斯特里斯魔王军电台官方网站</h1>
+			<h1>魔王电台 · 故事集</h1>
+            <p class="intro-text">在这里收听或阅读我们的故事...</p>
+
+            <div class="text-grid" id="textGrid">
+                </div>
 		</div>
+
+        <div id="readerModal" class="reader-overlay">
+            <div class="reader-container">
+                <div class="reader-header">
+                    <h2 id="reader-title">标题</h2>
+                    <div class="reader-controls">
+                        <span class="close-reader">&times;</span>
+                    </div>
+                </div>
+                <div class="reader-content">
+                    <div class="reader-meta">
+                        <span id="reader-author"><i class="fas fa-user"></i> 作者</span>
+                        <span id="reader-date"><i class="far fa-clock"></i> 时间</span>
+                    </div>
+                    <div class="reader-divider"></div>
+                    <div id="reader-body" class="article-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../js/arias.js"></script>
 	</body>
 </html>
