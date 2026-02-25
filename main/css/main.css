@@ -13,6 +13,26 @@
     color: #fff;
 }
 
+/* 悬浮底部栏 - 与顶部导航栏风格一致 */
+.moemoeQ {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    background: rgba(18, 27, 36, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 12px 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    z-index: 1000;
+    /* 可选：添加与导航栏一致的动画 */
+    animation: slideUp 0.3s ease-out;
+}
+
 html, body {
     font-family: var(--font-family), sans-serif;
     font-size: 14px;
@@ -171,6 +191,7 @@ li.UraArias {
     padding-right: 80px;
     max-width: 1400px;
     margin: 0 auto;
+	padding-bottom: 80px;
 }
 
 /* 响应式设计 */
