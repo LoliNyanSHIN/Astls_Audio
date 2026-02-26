@@ -12,52 +12,18 @@
 			href="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png"
 			type="image/x-icon"
 		/>
+        <!-- 组件加载脚本 -->
+        <script src="/js/components.js"></script>
 	</head>
-	<body>
-		<div class="navbar-wrapper">
-			<nav class="navbar">
-				<div class="navbar-brand">
-					<div>
-						<img
-							class="LoliNyanOnanii"
-							src="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png"
-							alt="阿斯特里斯魔王军Logo"
-						/>
-						<span class="title-text">阿斯特里斯魔王军</span>
-					</div>
-				</div>
-				<div class="navbar-menu">
-					<ul>
-						<li>
-							<a href="../../index.html">首页</a>
-						</li>
-						<li>
-							<a href="aus.html">关于我们</a>
-						</li>
-						<li>
-							<a href="gallery.html">画廊</a>
-						</li>
-						<li>
-							<a href="Arias.html">魔王电台</a>
-						</li>
-						<li class="UraArias">
-							<a href="UraArias.html">里电台</a>
-						</li>
-						<li>
-							<a href="post.html" class="active">电台公告</a>
-						</li>
-						<li>
-							<a href="../../LoliNyanMiniGame.html">迷你游戏</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</div>
+	<body data-components="navbar,footer">
+		<!-- 导航栏容器 -->
+		<div id="navbar-container"></div>
+
 		<div class="page-content">
 			<h1>欢迎来到阿斯特里斯魔王军电台公告</h1>
 		</div>
-		<footer class="moemoeQ">
-			<a class="moeicp" href="https://icp.gov.moe/?keyword=20262727" target="_blank">萌ICP备20262727号</a>
-		</footer>
+
+		<!-- 页脚容器 -->
+		<div id="footer-container"></div>
 	</body>
 </html>
