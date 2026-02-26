@@ -65,7 +65,8 @@ class ComponentLoader {
             console.log(`组件 ${componentName} 加载完成`);
         } catch (error) {
             console.error(`加载组件 ${componentName} 失败:`, error);
-            // 可以在这里添加降级处理，例如显示静态内容
+            // 降级处理：显示静态内容
+            this.showFallbackComponent(componentName, targetId);
         }
     }
 
@@ -204,6 +205,58 @@ class ComponentLoader {
             document.body.classList.add('dark-theme');
             const icon = themeToggle.querySelector('i');
             if (icon) icon.className = 'fas fa-sun';
+        }
+    }
+
+    // 显示后备组件
+    showFallbackComponent(componentName, targetId) {
+        const container = document.getElementById(targetId);
+        if (!container) return;
+
+        let fallbackHtml = '';
+        switch (componentName) {
+            case 'navbar':
+                fallbackHtml = `
+                    <div class="navbar-wrapper">
+                        <nav class="navbar">
+                            <div class="navbar-brand">
+                                <div>
+                                    <img class="LoliNyanOnanii" src="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png" alt="Logo" />
+                                    <span class="title-text">阿斯特里斯魔王军</span>
+                                </div>
+                            </div>
+                            <div class="navbar-menu">
+                                <ul>
+                                    <li><a href="/index.html">首页</a></li>
+                                    <li><a href="/main/html/aus.html">关于我们</a></li>
+                                    <li><a href="/main/html/gallery.html">画廊</a></li>
+                                    <li><a href="/main/html/Arias.html">魔王电台</a></li>
+                                    <li class="UraArias"><a href="/main/html/UraArias.html">里电台</a></li>
+                                    <li><a href="/main/html/post.html">电台公告</a></li>
+                                    <li><a href="/LoliNyanMiniGame.html">迷你游戏</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                `;
+                break;
+            case 'footer':
+                fallbackHtml = `
+                    <footer class="moemoeQ">
+                        <a class="moeicp" href="https://icp.gov.moe/?keyword=20262727" target="_blank">萌ICP备20262727号</a>
+                    </footer>
+                `;
+                break;
+            default:
+                fallbackHtml = `<div class="component-error">组件加载失败: ${componentName}</div>`;
+        }
+
+        container.innerHTML = fallbackHtml;
+        console.log(`组件 ${componentName} 使用后备内容`);
+
+        // 如果是导航栏，设置active状态
+        if (componentName === 'navbar' && this.config.autoSetActive) {
+            this.setActiveNavItem();
         }
     }
 

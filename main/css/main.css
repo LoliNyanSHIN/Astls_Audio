@@ -1,11 +1,16 @@
+/* 导入基础重置和变量 */
+@import url('../../css/base/reset.css');
+@import url('../../css/base/variables.css');
+
+/* 向后兼容性：将旧变量映射到新变量 */
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #FF5722;
-    --background-color: #F5F5F5;
-    --font-family: 'Maple';
-    --nav-bg-color: #FFFFFFF2;
-    --nav-border-radius: 20px;
-    --nav-box-shadow: 0px 4px 12px #0000001A;
+    --primary-color: var(--color-primary, #4CAF50);
+    --secondary-color: var(--color-primary-dark, #FF5722);
+    --background-color: var(--color-background, #F5F5F5);
+    --font-family: var(--font-family-base, 'Maple'), sans-serif;
+    --nav-bg-color: var(--color-surface, rgba(255, 255, 255, 0.95));
+    --nav-border-radius: var(--radius-xl, 20px);
+    --nav-box-shadow: var(--shadow-md, 0px 4px 12px rgba(0, 0, 0, 0.1));
 }
 
 .moeicp{

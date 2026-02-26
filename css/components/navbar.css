@@ -1,0 +1,299 @@
+/* 导航栏组件样式 */
+.navbar-wrapper {
+    position: fixed;
+    top: var(--spacing-4, 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: calc(100% - 160px);
+    max-width: 1400px;
+    min-width: 300px;
+    pointer-events: none;
+    margin: 0 auto;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl, 1rem);
+    padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
+    box-shadow: var(--shadow-md);
+    border: 0.5px solid var(--color-border);
+    transition: all var(--transition-normal);
+    pointer-events: auto;
+    margin: 0 auto;
+    position: relative;
+}
+
+.navbar:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* 左侧 logo 和标题区域 */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2, 0.5rem);
+    flex-shrink: 0;
+}
+
+/* 右侧导航链接区域 */
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.navbar ul {
+    display: flex;
+    gap: var(--spacing-5, 1.25rem);
+    align-items: center;
+}
+
+.navbar ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.navbar ul li a {
+    padding: var(--spacing-2, 0.5rem) var(--spacing-4, 1rem);
+    font-weight: 500;
+    font-size: var(--font-size-sm, 0.875rem);
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    color: var(--color-text-light);
+    line-height: 1.2;
+}
+
+.navbar ul li a:hover {
+    color: var(--color-primary);
+    background-color: rgba(217, 139, 159, 0.04);
+}
+
+/* 当前页面链接高亮 */
+.navbar ul li a.active {
+    color: var(--color-primary);
+    font-weight: 600;
+    background-color: rgba(217, 139, 159, 0.08);
+}
+
+/* 添加分隔线效果 */
+.navbar ul li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: calc(-1 * var(--spacing-2, 0.5rem));
+    top: 50%;
+    transform: translateY(-50%);
+    height: 14px;
+    width: 1px;
+    background-color: var(--color-border);
+}
+
+/* Logo 图片 */
+.LoliNyanOnanii {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: var(--spacing-2, 0.5rem);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    transition: transform var(--transition-fast);
+    vertical-align: middle;
+}
+
+.LoliNyanOnanii:hover {
+    transform: scale(1.05);
+}
+
+.title-text {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 600;
+    color: var(--color-secondary);
+    letter-spacing: 0.2px;
+    vertical-align: middle;
+}
+
+/* 确保UraArias链接完全隐藏 */
+li.UraArias {
+    display: none !important;
+}
+
+/* 悬停效果增强 */
+.navbar ul li a {
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar ul li a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.13), transparent);
+    transform: translateX(-100%);
+    transition: transform var(--transition-slow);
+}
+
+.navbar ul li a:hover::before {
+    transform: translateX(100%);
+}
+
+/* 添加页面加载时的动画 */
+.navbar {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 确保logo和文字在同一水平线上 */
+.navbar-brand > div {
+    display: flex;
+    align-items: center;
+}
+
+/* 确保导航栏始终在最上层 */
+.navbar-wrapper {
+    position: fixed !important;
+    top: var(--spacing-4, 1rem) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1600px) {
+    .navbar-wrapper {
+        width: calc(100% - 120px);
+    }
+}
+
+@media (max-width: 1200px) {
+    .navbar-wrapper {
+        width: calc(100% - 80px);
+        top: var(--spacing-3, 0.75rem);
+    }
+
+    .navbar ul {
+        gap: var(--spacing-4, 1rem);
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar-wrapper {
+        width: calc(100% - 60px);
+        top: var(--spacing-2, 0.5rem);
+    }
+
+    .navbar {
+        padding: var(--spacing-2, 0.5rem) var(--spacing-3, 0.75rem);
+    }
+
+    .navbar ul {
+        gap: var(--spacing-3, 0.75rem);
+    }
+
+    .navbar ul li a {
+        padding: var(--spacing-1, 0.25rem) var(--spacing-3, 0.75rem);
+        font-size: var(--font-size-xs, 0.75rem);
+    }
+
+    .title-text {
+        font-size: var(--font-size-base, 1rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-wrapper {
+        width: calc(100% - 40px);
+        top: var(--spacing-1, 0.25rem);
+    }
+
+    .navbar {
+        padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+        border-radius: var(--radius-lg, 0.75rem);
+    }
+
+    .navbar ul {
+        gap: var(--spacing-2, 0.5rem);
+    }
+
+    .navbar ul li a {
+        padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+        font-size: var(--font-size-xs, 0.75rem);
+    }
+
+    .navbar ul li:not(:last-child)::after {
+        right: calc(-1 * var(--spacing-1, 0.25rem));
+        height: 12px;
+    }
+
+    .title-text {
+        font-size: var(--font-size-sm, 0.875rem);
+    }
+
+    .LoliNyanOnanii {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-wrapper {
+        width: calc(100% - 32px);
+        top: var(--spacing-1, 0.25rem);
+    }
+
+    .navbar {
+        padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+    }
+
+    /* 在小屏幕上隐藏部分链接 */
+    .navbar ul li:nth-child(n+4) {
+        display: none;
+    }
+
+    .navbar ul {
+        gap: var(--spacing-1, 0.25rem);
+    }
+
+    .navbar ul li a {
+        padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar-wrapper {
+        width: calc(100% - 20px);
+    }
+
+    .navbar {
+        padding: var(--spacing-1, 0.25rem);
+    }
+
+    /* 隐藏所有链接，只显示第一个和最后一个 */
+    .navbar ul li {
+        display: none;
+    }
+
+    .navbar ul li:first-child,
+    .navbar ul li:last-child {
+        display: block;
+    }
+}
