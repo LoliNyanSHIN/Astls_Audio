@@ -10,10 +10,23 @@ const Theme = (function() {
         return isAriasPage ? 'dark-mode' : 'dark-theme';
     }
 
+    // 检查是否为游戏页面（五子棋等，不需要主题同步）
+    function isGamePage() {
+        const path = window.location.pathname;
+        return path.includes('LoliNyanMiniGame.html') ||
+               document.body.dataset.components === 'none';
+    }
+
     // 初始化主题系统
     function init(options = {}) {
         if (initialized) {
             console.warn('主题模块已初始化');
+            return;
+        }
+
+        // 如果是游戏页面，不初始化主题模块
+        if (isGamePage()) {
+            console.log('游戏页面检测到，跳过主题模块初始化');
             return;
         }
 
@@ -57,6 +70,14 @@ const Theme = (function() {
                 }
             });
         }
+
+        // 监听storage事件，实现跨页面实时同步
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'theme' && e.newValue !== e.oldValue) {
+                console.log('检测到其他页面主题变更:', e.newValue);
+                applyTheme(e.newValue);
+            }
+        });
 
         initialized = true;
         console.log('主题模块初始化完成', { isAriasPage, themeClass: getThemeClass() });
@@ -172,6 +193,16 @@ if (typeof module !== 'undefined' && module.exports) {
 
     // 页面加载完成后自动初始化主题模块（如果有主题按钮）
     document.addEventListener('DOMContentLoaded', () => {
+        // 检查是否为游戏页面，如果是则跳过主题初始化
+        const path = window.location.pathname;
+        const isGamePage = path.includes('LoliNyanMiniGame.html') ||
+                          document.body.dataset.components === 'none';
+
+        if (isGamePage) {
+            console.log('游戏页面检测到，跳过主题模块自动初始化');
+            return;
+        }
+
         // 检查是否有主题按钮或页面需要主题
         if (document.getElementById('themeToggle') ||
             document.body.dataset.themeButton === 'true') {

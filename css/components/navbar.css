@@ -297,3 +297,37 @@ li.UraArias {
         display: block;
     }
 }
+
+/* 主题切换按钮样式 */
+.navbar .theme-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.navbar .theme-btn:hover {
+    background-color: #f0f0f0;
+    color: var(--color-primary);
+}
+
+/* 深色模式下的按钮 */
+body.dark-theme .navbar .theme-btn,
+body.dark-mode .navbar .theme-btn {
+    border-color: #555;
+    color: #aaa;
+}
+
+body.dark-theme .navbar .theme-btn:hover,
+body.dark-mode .navbar .theme-btn:hover {
+    background-color: #333;
+    color: #fff;
+}

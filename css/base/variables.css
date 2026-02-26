@@ -70,7 +70,7 @@
     /* 布局 */
     --container-width: 1200px;
     --container-padding: var(--spacing-4);
-    --navbar-height: 64px;
+    --navbar-height: 80px;
     --footer-height: 60px;
 
     /* 响应式断点 */

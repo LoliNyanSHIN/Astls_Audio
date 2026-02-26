@@ -10,10 +10,12 @@ class ComponentLoader {
 
     // 获取组件路径
     getComponentPath(componentName) {
+        console.log(`🔧 getComponentPath调用: ${componentName}, 协议: ${window.location.protocol}`);
         // 如果当前协议是 file:，使用相对路径
         if (window.location.protocol === 'file:') {
             // 计算相对于当前页面的组件路径
             const currentDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            console.log(`当前目录: "${currentDir}", 路径名: "${window.location.pathname}"`);
             const componentsDir = '/components'; // 组件目录在根目录
 
             // 简单的路径解析：如果当前页面在子目录，需要向上导航
@@ -30,18 +32,22 @@ class ComponentLoader {
                 return `/components/${componentName}.html`;
             }
 
+            console.log(`file://协议，相对路径: ${relativePath}/${componentName}.html`);
             return `${relativePath}/${componentName}.html`;
         }
 
         // 否则使用根相对路径
+        console.log(`非file://协议，使用根路径: /components/${componentName}.html`);
         return `/components/${componentName}.html`;
     }
 
     // 加载组件
     async loadComponent(componentName, targetId, options = {}) {
+        console.log(`🔧 开始加载组件: ${componentName}, 目标容器: #${targetId}`);
         try {
             // 组件路径
             const componentPath = this.getComponentPath(componentName);
+            console.log(`组件路径: ${componentPath}`);
             const response = await fetch(componentPath);
 
             if (!response.ok) {
@@ -273,6 +279,8 @@ class ComponentLoader {
 
     // 批量加载页面组件
     async loadPageComponents() {
+        console.log('🔧 loadPageComponents开始执行');
+        console.log('页面data-components属性:', document.body.dataset.components);
         const bodyConfig = document.body.dataset;
 
         // 检查是否完全禁用组件
