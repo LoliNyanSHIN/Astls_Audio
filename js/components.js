@@ -178,33 +178,44 @@ class ComponentLoader {
         }
     }
 
-    // 附加主题切换功能
+    // 附加主题切换功能（使用主题模块）
     attachThemeToggle() {
         const themeToggle = document.getElementById('themeToggle');
         if (!themeToggle) return;
 
-        // 简单的主题切换逻辑
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-theme');
-            const icon = this.querySelector('i');
-            if (document.body.classList.contains('dark-theme')) {
-                icon.className = 'fas fa-sun';
-                this.title = '切换到浅色模式';
-            } else {
-                icon.className = 'fas fa-moon';
-                this.title = '切换到深色模式';
+        // 使用主题模块初始化
+        if (typeof Theme !== 'undefined') {
+            // 主题模块已加载，初始化它
+            Theme.init({
+                themeButtonId: 'themeToggle',
+                checkAriasPage: true
+            });
+        } else {
+            console.warn('主题模块未加载，使用简单主题切换逻辑作为后备');
+
+            // 简单后备逻辑
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                const icon = this.querySelector('i');
+                if (document.body.classList.contains('dark-theme')) {
+                    icon.className = 'fas fa-sun';
+                    this.title = '切换到浅色模式';
+                } else {
+                    icon.className = 'fas fa-moon';
+                    this.title = '切换到深色模式';
+                }
+
+                // 保存主题偏好
+                localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+            });
+
+            // 加载保存的主题
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                const icon = themeToggle.querySelector('i');
+                if (icon) icon.className = 'fas fa-sun';
             }
-
-            // 保存主题偏好
-            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
-        });
-
-        // 加载保存的主题
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-            const icon = themeToggle.querySelector('i');
-            if (icon) icon.className = 'fas fa-sun';
         }
     }
 
