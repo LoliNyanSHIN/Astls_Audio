@@ -43,6 +43,21 @@
     const moveTimerSpan = document.getElementById('moveTimer');
     const networkRoomInfo = document.getElementById('networkRoomInfo');
 
+    // 尝试在页面加载时预创建 AI Worker（如果可用），并在失败时使用 Blob 回退。
+    (function preloadWorker() {
+        if (typeof Worker === 'undefined') return;
+        try {
+            window.__aiWorker = new Worker('main/js/aiWorker.js');
+        } catch (e) {
+            console.warn('预创建 Worker 失败，将尝试 Blob 回退', e);
+            fetch('main/js/aiWorker.js').then(r => r.text()).then(src => {
+                const blob = new Blob([src], { type: 'application/javascript' });
+                window.__aiWorker = new Worker(URL.createObjectURL(blob));
+            }).catch(err => {
+                console.error('预加载 Worker 脚本失败', err);
+            });
+        }
+    })();
 
             // 模式切换
             document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -153,7 +168,11 @@
                 const scores = Array(GameState.size).fill().map(() => Array(GameState.size).fill(0));
                 const dirs = [[1,0],[0,1],[1,1],[1,-1]];
                 for (let r = 0; r < GameState.size; r++) for (let c = 0; c < GameState.size; c++) {
-                    if (board[r][c] !== 0) continue;
+                    if (board[r][c] !== 0) {
+                        // occupied cell has no heuristic value
+                        scores[r][c] = { player: 0, opponent: 0 };
+                        continue;
+                    }
                     let playerScore = 0, opponentScore = 0;
                     for (let [dx, dy] of dirs) {
                         let count = 1;
@@ -173,6 +192,19 @@
                     scores[r][c] = { player: playerScore, opponent: opponentScore };
                 }
                 return scores;
+            }
+
+            // 生成候选着法（用于本地降级情形）
+            function generateCandidates(board, forPlayer, K = 40) {
+                const list = [];
+                const scores = evaluatePosition(forPlayer, board);
+                for (let r = 0; r < GameState.size; r++) for (let c = 0; c < GameState.size; c++) {
+                    if (board[r][c] !== 0) continue;
+                    const s = scores[r][c].player + scores[r][c].opponent * 0.8;
+                    list.push({ r, c, s });
+                }
+                list.sort((a, b) => b.s - a.s);
+                return list.slice(0, Math.max(1, Math.min(K, list.length))).map(x => [x.r, x.c]);
             }
 
             // 在给定board上模拟消除（不影响 GameState.board）
@@ -216,6 +248,7 @@
 
             // AI 决策 (支持普通和奖励模式)
             function aiMove() {
+                console.log('aiMove start', { currentPlayer: GameState.currentPlayer, bonusMode: GameState.bonusMode, aiThinking: GameState.aiThinking });
                 if (GameState.aiThinking) return;
                 if (!GameState.gameActive) return;
                 // 如果轮到AI且游戏进行中
@@ -242,14 +275,32 @@
                     // 建立空位列表（用于普通回合）
                     let empty = allCells.filter(([r,c]) => GameState.board[r][c] === 0);
 
-                    // 先查找立即能让 AI 自己消除（获利）的落子
-                    for (let [r,c] of allCells) {
-                        const orig = GameState.board[r][c];
+                    // 核心：判断某个落子是否会立刻让指定玩家获胜（基于真实规则）
+                    const isWinningMove = (r, c, player) => {
                         const temp = copyBoard(GameState.board);
-                        temp[r][c] = 2;
-                        const res = eliminateFromStoneOnBoard(temp, r, c, 2);
-                        if (res.dirCount > 0) {
-                            // 立即取胜/消除优先
+                        temp[r][c] = player;
+                        const res = eliminateFromStoneOnBoard(temp, r, c, player);
+                        if (res.dirCount === 0) return false;
+                        // 计算新的回合连击
+                        let roundHits = GameState.roundHitCombos + res.hitCombo;
+                        if (roundHits >= GameState.settings.comboWin) return true;
+                        // 计算总连珠
+                        let newWhite = GameState.whiteCombosDir;
+                        let newBlack = GameState.blackCombosDir;
+                        if (player === 2) newWhite += res.dirCount; else newBlack += res.dirCount;
+                        let total = newWhite + newBlack;
+                        if (total >= GameState.settings.targetCombos) {
+                            if (newWhite > newBlack && player === 2) return true;
+                            if (newBlack > newWhite && player === 1) return true;
+                            // 平局不算胜利
+                        }
+                        return false;
+                    };
+
+                    // 先查找真正能让 AI 获胜的落子
+                    for (let [r,c] of allCells) {
+                        if (GameState.bonusMode && GameState.board[r][c] === GameState.currentPlayer) continue;
+                        if (isWinningMove(r, c, 2)) {
                             if (GameState.bonusMode) {
                                 GameState._aiPlacing = true;
                                 GameState.aiThinking = false;
@@ -265,20 +316,17 @@
                         }
                     }
 
-                    // 再查找对手的立即消除威胁，优先堵截
+                    // 再查找对手的立即胜利威胁并堵截
                     for (let [r,c] of allCells) {
-                        const temp = copyBoard(GameState.board);
-                        temp[r][c] = 1;
-                        const res = eliminateFromStoneOnBoard(temp, r, c, 1);
-                        if (res.dirCount > 0) {
-                            // 如果对手能消除，这里尝试堵截（在相同位置落子或占位）
+                        if (GameState.board[r][c] !== 0 && GameState.board[r][c] !== 2 && !GameState.bonusMode) continue;
+                        if (isWinningMove(r, c, 1)) {
+                            // 尝试在该位置堵截
                             if (GameState.bonusMode) {
                                 GameState._aiPlacing = true;
                                 GameState.aiThinking = false;
                                 handleBonusAction(r, c);
                                 GameState._aiPlacing = false;
                             } else {
-                                // 如果目标为空，直接下；若为对方棋子，则替换
                                 GameState._aiPlacing = true;
                                 GameState.aiThinking = false;
                                 tryPlace(r, c);
@@ -292,7 +340,19 @@
                     const chooseLocalMove = () => {
                         if (GameState.bonusMode) {
                             const candidates = allCells.filter(([r,c]) => GameState.board[r][c] !== GameState.currentPlayer);
-                            if (candidates.length === 0) return allCells[Math.floor(Math.random() * allCells.length)];
+                            console.log('bonus move candidates', candidates);
+                            if (candidates.length === 0) {
+                                // 尝试优先选择非己方格子再随机
+                                const others = allCells.filter(([r,c]) => GameState.board[r][c] !== GameState.currentPlayer);
+                                if (others.length > 0) {
+                                    const choice = others[Math.floor(Math.random() * others.length)];
+                                    console.log('bonus fallback to others', choice);
+                                    return choice;
+                                }
+                                const choice = allCells[Math.floor(Math.random() * allCells.length)];
+                                console.log('bonus fallback to allCells', choice);
+                                return choice;
+                            }
                             let bestScore = -Infinity, bestList = [];
                             for (let [r,c] of candidates) {
                                 const temp = copyBoard(GameState.board);
@@ -304,14 +364,34 @@
                                 if (score > bestScore) { bestScore = score; bestList = [[r,c]]; }
                                 else if (score === bestScore) bestList.push([r,c]);
                             }
-                            return bestList[Math.floor(Math.random()*bestList.length)];
+                            let pick;
+                            if (bestList.length > 0) {
+                                pick = bestList[Math.floor(Math.random()*bestList.length)];
+                            } else {
+                                // should not happen; fall back to any candidate or allCells
+                                console.warn('bestList empty in bonus chooseLocalMove, candidates:', candidates);
+                                if (candidates.length > 0) {
+                                    pick = candidates[Math.floor(Math.random()*candidates.length)];
+                                } else {
+                                    pick = allCells[Math.floor(Math.random()*allCells.length)];
+                                }
+                            }
+                            console.log('bonus chooseLocalMove pick', pick);
+                            return pick;
                         }
                         if (empty.length === 0) return null;
                         if (difficulty === 'easy') return empty[Math.floor(Math.random() * empty.length)];
-                        // 中/高阶评分策略
+
+                        // 对于较慢的 hard 模式且没有 worker 时，限制候选数以避免卡顿
+                        let consider = empty;
+                        if (difficulty !== 'easy' && !window.__aiWorker) {
+                            // 使用简单启发式筛选前 N 个空位
+                            consider = generateCandidates(GameState.board, 2, GameState.settings.workerCandidates);
+                        }
+
                         let candidates = [];
                         let bestScore = -Infinity;
-                        for (let [r,c] of empty) {
+                        for (let [r,c] of consider) {
                             const temp = copyBoard(GameState.board);
                             temp[r][c] = 2;
                             const res = eliminateFromStoneOnBoard(temp, r, c, 2);
@@ -340,12 +420,32 @@
                         return candidates[Math.floor(Math.random() * candidates.length)];
                     };
 
-                    if (useWorker && !GameState.bonusMode) {
+                    // 辅助：尝试创建一个可用的 Worker，如果失败则返回 null
+                    const ensureWorker = () => {
+                        if (window.__aiWorker) return window.__aiWorker;
                         try {
-                            if (!window.__aiWorker) {
-                                window.__aiWorker = new Worker('main/js/aiWorker.js');
+                            window.__aiWorker = new Worker('main/js/aiWorker.js');
+                            return window.__aiWorker;
+                        } catch (e) {
+                            console.warn('创建 Worker 失败，尝试 Blob 回退', e);
+                            // 拿脚本内容并用 blob 创建
+                            try {
+                                fetch('main/js/aiWorker.js').then(r => r.text()).then(src => {
+                                    const blob = new Blob([src], { type: 'application/javascript' });
+                                    window.__aiWorker = new Worker(URL.createObjectURL(blob));
+                                }).catch(err => {
+                                    console.error('fetch 脚本失败，无法创建 Worker', err);
+                                });
+                            } catch (e2) {
+                                console.error('Blob 回退失败', e2);
                             }
-                            const w = window.__aiWorker;
+                            return null;
+                        }
+                    };
+
+                    if (useWorker && !GameState.bonusMode) {
+                        const w = ensureWorker();
+                        if (w) {
                             const onmsg = function(ev) {
                                 const { row, col } = ev.data;
                                 w.removeEventListener('message', onmsg);
@@ -356,38 +456,47 @@
                                     GameState._aiPlacing = false;
                                 } else {
                                     // worker 返回无效结果，转本地计算
-                                    const fallback = chooseLocalMove();
-                                    if (fallback) {
-                                        GameState._aiPlacing = true;
+                                    setTimeout(() => {
+                                        const fallback = chooseLocalMove();
+                                        if (fallback) {
+                                            GameState._aiPlacing = true;
+                                            if (GameState.bonusMode) handleBonusAction(fallback[0], fallback[1]);
+                                            else tryPlace(fallback[0], fallback[1]);
+                                            GameState._aiPlacing = false;
+                                        }
                                         GameState.aiThinking = false;
-                                        tryPlace(fallback[0], fallback[1]);
-                                        GameState._aiPlacing = false;
-                                    } else {
-                                        GameState.aiThinking = false;
-                                    }
+                                    }, 0);
                                 }
                             };
                             w.addEventListener('message', onmsg);
                             w.postMessage({ board: GameState.board, size: GameState.size, depth: GameState.settings.workerDepth, player: 2, candidateLimit: GameState.settings.workerCandidates });
                             return; // 等待 Worker 返回
-                        } catch (err) {
-                            console.warn('Worker failed, fallback to local AI', err);
                         }
+                        // 如果无法创建 Worker，则降级为本地
+                        console.warn('Worker 无法使用，AI 将在主线程计算');
                     }
-                    const localChoice = chooseLocalMove();
-                    if (localChoice) {
-                        GameState._aiPlacing = true;
-                        GameState.aiThinking = false;
-                        tryPlace(localChoice[0], localChoice[1]);
-                        GameState._aiPlacing = false;
-                    } else {
-                        GameState.aiThinking = false;
-                    }
+                    // 本地计算在下一次事件循环执行，以免阻塞 UI
+                    setTimeout(() => {
+                        const localChoice = chooseLocalMove();
+                        if (localChoice) {
+                            GameState._aiPlacing = true;
+                            GameState.aiThinking = false;
+                            if (GameState.bonusMode) {
+                                handleBonusAction(localChoice[0], localChoice[1]);
+                            } else {
+                                tryPlace(localChoice[0], localChoice[1]);
+                            }
+                            GameState._aiPlacing = false;
+                        } else {
+                            GameState.aiThinking = false;
+                        }
+                    }, 0);
                 }, 100);
             }
 
             // 处理奖励行动 (点击任意格子)
             function handleBonusAction(row, col) {
+                console.log('handleBonusAction', { row, col, bonusMode: GameState.bonusMode, currentPlayer: GameState.currentPlayer, aiThinking: GameState.aiThinking, _aiPlacing: GameState._aiPlacing });
                 if (!GameState.gameActive || !GameState.bonusMode) return false;
                 if (GameState.mode === 'ai' && GameState.currentPlayer === 2 && !GameState._aiPlacing) {
                     alert('现在是AI回合');
