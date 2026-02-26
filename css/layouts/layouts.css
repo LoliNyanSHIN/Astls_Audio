@@ -1,0 +1,57 @@
+/* 布局样式 */
+.page-content {
+    padding-top: calc(var(--navbar-height, 64px) + var(--spacing-8, 2rem));
+    padding-left: var(--spacing-10, 2.5rem);
+    padding-right: var(--spacing-10, 2.5rem);
+    padding-bottom: var(--spacing-10, 2.5rem);
+    max-width: var(--container-width, 1200px);
+    margin: 0 auto;
+}
+
+/* 响应式布局调整 */
+@media (max-width: var(--breakpoint-xxl, 1600px)) {
+    .page-content {
+        padding-left: var(--spacing-8, 2rem);
+        padding-right: var(--spacing-8, 2rem);
+    }
+}
+
+@media (max-width: var(--breakpoint-xl, 1200px)) {
+    .page-content {
+        padding-top: calc(var(--navbar-height, 64px) + var(--spacing-6, 1.5rem));
+        padding-left: var(--spacing-6, 1.5rem);
+        padding-right: var(--spacing-6, 1.5rem);
+    }
+}
+
+@media (max-width: var(--breakpoint-lg, 992px)) {
+    .page-content {
+        padding-top: calc(var(--navbar-height, 64px) + var(--spacing-5, 1.25rem));
+        padding-left: var(--spacing-5, 1.25rem);
+        padding-right: var(--spacing-5, 1.25rem);
+    }
+}
+
+@media (max-width: var(--breakpoint-md, 768px)) {
+    .page-content {
+        padding-top: calc(var(--navbar-height, 64px) + var(--spacing-4, 1rem));
+        padding-left: var(--spacing-4, 1rem);
+        padding-right: var(--spacing-4, 1rem);
+    }
+}
+
+@media (max-width: var(--breakpoint-sm, 576px)) {
+    .page-content {
+        padding-top: calc(var(--navbar-height, 64px) + var(--spacing-3, 0.75rem));
+        padding-left: var(--spacing-3, 0.75rem);
+        padding-right: var(--spacing-3, 0.75rem);
+    }
+}
+
+@media (max-width: var(--breakpoint-xs, 400px)) {
+    .page-content {
+        padding-top: calc(var(--navbar-height, 64px) + var(--spacing-2, 0.5rem));
+        padding-left: var(--spacing-2, 0.5rem);
+        padding-right: var(--spacing-2, 0.5rem);
+    }
+}

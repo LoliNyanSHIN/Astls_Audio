@@ -1,0 +1,73 @@
+/* 基础全局样式 */
+html, body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: 350;
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    min-height: 100vh;
+    overflow-x: hidden; /* 防止水平滚动条 */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+}
+
+/* 图片基础样式 */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 基础排版 */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-4);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-4);
+}
+
+/* 基础容器 */
+.container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* 基础工具类 */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-4 {
+    margin-top: var(--spacing-4);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-4);
+}
+
+.p-4 {
+    padding: var(--spacing-4);
+}
