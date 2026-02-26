@@ -6,35 +6,27 @@
     <title>魔王军画廊 - 阿斯特里斯魔王军</title>
     <link rel="stylesheet" href="../../font/Maple.css">
     <link rel="stylesheet" href="../css/main.css">
+    <!-- 直接加载布局CSS，绕过@import -->
+    <link rel="stylesheet" href="../../css/layouts/layouts.css">
     <link rel="stylesheet" href="../css/gallery.css">
+    <!-- 直接加载组件CSS，绕过@import -->
+    <link rel="stylesheet" href="../../css/components/navbar.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
     
     <link rel="shortcut icon" href="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 组件加载脚本 -->
+    <script src="../../js/components.js"></script>
+    <!-- 状态管理和主题模块 -->
+    <script src="../../js/state.js"></script>
+    <script src="../../js/modules/theme.js"></script>
 </head>
-<body>
-    <div class="navbar-wrapper">
-        <nav class="navbar">
-            <div class="navbar-brand">
-                <div>
-                    <img class="LoliNyanOnanii" src="https://pan.xxbyq.net/f/G7JQHy/0128_onanii.png" alt="Logo" />
-                    <span class="title-text">阿斯特里斯魔王军</span>
-                </div>
-            </div>
-            <div class="navbar-menu">
-                <ul>
-                    <li><a href="../../index.html">首页</a></li>
-                    <li><a href="aus.html">关于我们</a></li>
-                    <li><a href="gallery.html" class="active">画廊</a></li>
-                    <li><a href="Arias.html">魔王电台</a></li>
-                    <li class="UraArias"><a href="UraArias.html">里电台</a></li>
-                    <li><a href="post.html">电台公告</a></li>
-					<li>
-						<a href="../../LoliNyanMiniGame.html">迷你游戏</a>
-					</li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+<body data-components="navbar,footer" data-theme-button="true">
+    <!-- 导航栏容器 -->
+    <div id="navbar-container"></div>
+
+    <!-- 导航栏占位盒子，防止内容被遮挡 -->
+    <div class="navbar-spacer"></div>
 
     <div class="page-content gallery-container">
         <div class="gallery-header">
@@ -142,9 +134,9 @@
             </div>
         </div>
     </div>
-	<footer class="moemoeQ">
-		<a class="moeicp" href="https://icp.gov.moe/?keyword=20262727" target="_blank">萌ICP备20262727号</a>
-	</footer>
+
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
 
     <script src="../js/gallery.js"></script>
 </body>

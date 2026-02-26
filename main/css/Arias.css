@@ -44,7 +44,7 @@ h1 {
 }
 
 /* 日夜切换按钮样式 */
-.theme-btn {
+.navbar .theme-btn {
     background: none;
     border: 1px solid #ddd;
     border-radius: 50%;
@@ -59,17 +59,17 @@ h1 {
     margin-left: 10px;
 }
 
-.theme-btn:hover {
+.navbar .theme-btn:hover {
     background-color: #f0f0f0;
-    color: var(--primary-color);
+    color: var(--color-primary);
 }
 
 /* 深色模式下的按钮 */
-body.dark-mode .theme-btn {
+body.dark-mode .navbar .theme-btn {
     border-color: #555;
     color: #aaa;
 }
-body.dark-mode .theme-btn:hover {
+body.dark-mode .navbar .theme-btn:hover {
     background-color: #333;
     color: #fff;
 }

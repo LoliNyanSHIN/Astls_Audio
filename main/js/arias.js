@@ -54,7 +54,7 @@ const articlesData = [
 const textGrid = document.getElementById('textGrid');
 const readerModal = document.getElementById('readerModal');
 const closeReaderBtn = document.querySelector('.close-reader');
-const themeBtn = document.getElementById('themeToggle');
+// 主题按钮由Theme模块处理
 
 // 阅读器元素
 const readerTitle = document.getElementById('reader-title');
@@ -65,37 +65,13 @@ const readerBody = document.getElementById('reader-body');
 // 初始化
 function init() {
     renderGrid();
-    initTheme(); // 初始化主题
+    // 主题由Theme模块处理，不再需要单独初始化
 }
 
 // ------------------------------------
-// 1. 日夜模式逻辑
+// 1. 日夜模式逻辑（由Theme模块处理）
 // ------------------------------------
-function initTheme() {
-    // 检查本地存储
-    const savedTheme = localStorage.getItem('theme');
-    const icon = themeBtn.querySelector('i');
-    
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        icon.classList.replace('fa-moon', 'fa-sun'); // 换成太阳图标
-    }
-
-    // 绑定点击事件
-    themeBtn.onclick = () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        
-        // 切换图标
-        if (isDark) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            icon.classList.replace('fa-sun', 'fa-moon');
-            localStorage.setItem('theme', 'light');
-        }
-    };
-}
+// 主题功能已迁移到Theme模块，无需额外初始化
 
 // ------------------------------------
 // 2. 渲染卡片网格

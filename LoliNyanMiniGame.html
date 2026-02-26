@@ -6,8 +6,17 @@
 	<link rel="stylesheet" href="font/Maple.css">
     <title>🌸 五子棋 · 连珠消除 · 粉彩版</title>
     <link rel="stylesheet" href="main/css/LoliNyanMiniGame.css">
+    <!-- 直接加载组件CSS，绕过@import -->
+    <link rel="stylesheet" href="css/components/navbar.css">
+    <link rel="stylesheet" href="css/components/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 组件加载脚本（此页面不需要组件，但保留脚本以保持一致性） -->
+    <script src="js/components.js"></script>
+    <!-- 状态管理和主题模块 -->
+    <script src="js/state.js"></script>
+    <script src="js/modules/theme.js"></script>
 </head>
-<body>
+<body data-components="none" data-theme-button="true">
 <div class="game-container">
     <div class="board-section">
         <canvas id="board" width="640" height="640"></canvas>

@@ -1,0 +1,66 @@
+/* 现代CSS重置 */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    min-height: 100vh;
+    line-height: var(--line-height-normal, 1.5);
+    font-family: var(--font-family-base, sans-serif);
+    color: var(--color-text, #333);
+    background-color: var(--color-background, #fff);
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+input, button, textarea, select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    line-height: var(--line-height-tight, 1.25);
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* 移除默认焦点轮廓，提供自定义焦点样式 */
+:focus {
+    outline: 2px solid var(--color-primary, #d98b9f);
+    outline-offset: 2px;
+}
+
+/* 为鼠标用户移除焦点样式 */
+:focus:not(:focus-visible) {
+    outline: none;
+}
