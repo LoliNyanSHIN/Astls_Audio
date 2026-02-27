@@ -18,9 +18,9 @@
     --color-shadow: rgba(0, 0, 0, 0.1);
 
     /* 字体 */
-    --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-base: "Maple" -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-family-heading: var(--font-family-base);
-    --font-family-mono: "Maple Mono", "Cascadia Mono", "Consolas", monospace;
+    --font-family-mono: "Maple", "Cascadia Mono", "Consolas", monospace;
 
     /* 字体大小 */
     --font-size-xs: 0.75rem;   /* 12px */
