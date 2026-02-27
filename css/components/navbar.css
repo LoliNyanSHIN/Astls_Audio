@@ -119,8 +119,8 @@
     vertical-align: middle;
 }
 
-/* 确保UraArias链接完全隐藏 */
-li.UraArias {
+/* 确保不需要显示的链接完全隐藏 */
+li.UraLink {
     display: none !important;
 }
 

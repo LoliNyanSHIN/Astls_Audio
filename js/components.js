@@ -248,9 +248,9 @@ class ComponentLoader {
                                     <li><a href="/main/html/aus.html">关于我们</a></li>
                                     <li><a href="/main/html/gallery.html">画廊</a></li>
                                     <li><a href="/main/html/Arias.html">魔王电台</a></li>
-                                    <li class="UraArias"><a href="/main/html/UraArias.html">里电台</a></li>
+                                    <li class="UraLink"><a href="/main/html/UraArias.html">里电台</a></li>
                                     <li><a href="/main/html/post.html">电台公告</a></li>
-                                    <li><a href="/LoliNyanMiniGame.html">迷你游戏</a></li>
+                                    <li class="UraLink"><a href="/LoliNyanMiniGame.html">迷你游戏</a></li>
                                 </ul>
                             </div>
                         </nav>
